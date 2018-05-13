@@ -22,14 +22,14 @@ library(lwgeom)
 #install.packages("RgoogleMaps")
 library(RgoogleMaps)
 #install.packages("cranvas")
-library(cranvas)
+#library(cranvas)
 library(ggmap)
 ```
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 Smith <-"Smith College, Northampton, MA"
 getGeoCode(Smith)
-Home<-"77 Overlook Road, Montclair, NJ"
+Home<-"Montclair, NJ"
 H<-getGeoCode(Home)
 H
 Rutgers <-"Rutgers–New Brunswick, New Brunswick, NJ"

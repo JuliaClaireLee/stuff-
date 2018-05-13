@@ -1,0 +1,81 @@
+---
+title: "Untitled"
+author: "Julia Lee"
+date: "5/12/2018"
+output: 
+  html_document:
+    theme: cosmo 
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+#install.packages("sf")
+library(sf)
+#install.packages("macleish")
+library(leaflet)
+library(RSQLite)
+#install.packages("lwgeom")
+library(lwgeom)
+#install.packages("ggmap")
+#install.packages("RgoogleMaps")
+library(RgoogleMaps)
+#install.packages("cranvas")
+library(cranvas)
+library(ggmap)
+```
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+Smith <-"Smith College, Northampton, MA"
+getGeoCode(Smith)
+Home<-"77 Overlook Road, Montclair, NJ"
+H<-getGeoCode(Home)
+H
+Rutgers <-"Rutgers–New Brunswick, New Brunswick, NJ"
+RISD <-"Rhode Island School of Design (RISD), College Street, Providence, RI"
+mapdist(from=Home, to = Smith, mode = "driving")
+Yellow_Brick_road<-route(Home, Smith, structure = "route", mode = "driving" ) 
+Yellow_Brick_road2<-route(Home, RISD, structure = "route", mode = "driving") 
+  Yellow_Brick_road3<-route(Smith, RISD, structure = "route", mode = "driving")
+  Yellow_Brick_road4<-route(Home, Rutgers, structure = "route", mode = "driving")
+  home<-geocode(Home) 
+smith <-geocode(Smith)   
+risd <-geocode(RISD)
+rutgers <-geocode(Rutgers)
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+ qmap("Meriden, CT", zoom = 8, maptype = 'watercolor') +
+geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "green", alpha = 0.65, size = 2, data = Yellow_Brick_road ) +
+   geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "blue" , alpha = 0.65, size = 2, data = Yellow_Brick_road2) +
+   geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "purple" , alpha = 0.65, size = 2, data = Yellow_Brick_road4) +
+   geom_point(aes(x = lon, y = lat), data = home, size = 3.5 , shape =18, color =  "yellow", alpha = 0.75 ) + 
+     geom_point(aes(x = lon, y = lat), data = rutgers, size = 3.5 , shape =25, fill =  "purple", alpha = 0.75 ) + 
+     geom_point(aes(x = lon, y = lat), data = risd, size = 3.5 , shape =22, fill =  "lightblue", alpha = 0.75 ) + 
+     geom_point(aes(x = lon, y = lat), data = smith, size = 3.5 , shape =21, fill =  "lightgreen", alpha = 0.75 ) 
+ 
+  
+```
+
+
+
+
+```{r, message=FALSE, warning=FALSE}
+library(leaflet)
+map <-leaflet() %>%
+      addTiles(group = "Road") %>%
+      addMarkers(lng = ~lon, lat = ~lat, data = home, popup = "Home") %>%
+        addMarkers(lng = ~lon, lat = ~lat, data = smith, popup = "Smith") %>%
+        addMarkers(lng = ~lon, lat = ~lat, data = risd, popup = "RISD") %>%
+        addMarkers(lng = ~lon, lat = ~lat, data = rutgers, popup = "Rutgers") %>%
+        addScaleBar(options = scaleBarOptions(maxWidth = 80, metric = FALSE, imperial = TRUE, updateWhenIdle = TRUE)) %>%
+   addProviderTiles("Esri.WorldTopoMap", group = "Topography_lines")  %>%
+  addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
+  addLayersControl(baseGroups = c("Topography_lines", "street","Satellite" )) 
+  
+
+map
+```
+

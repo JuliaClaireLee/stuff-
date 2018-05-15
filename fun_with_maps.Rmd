@@ -29,7 +29,7 @@ library(ggmap)
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 Smith <-"Smith College, Northampton, MA"
 getGeoCode(Smith)
-Home<-"Montclair, NJ"
+Home<-"Overlook Road,Montclair, NJ"
 H<-getGeoCode(Home)
 H
 Rutgers <-"Rutgers–New Brunswick, New Brunswick, NJ"
@@ -47,7 +47,7 @@ rutgers <-geocode(Rutgers)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
- qmap("Meriden, CT", zoom = 8, maptype = 'watercolor') +
+ qmap("Meriden, CT", zoom = 8, maptype = 'roadmap') +
 geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "green", alpha = 0.65, size = 2, data = Yellow_Brick_road ) +
    geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "blue" , alpha = 0.65, size = 2, data = Yellow_Brick_road2) +
    geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "purple" , alpha = 0.65, size = 2, data = Yellow_Brick_road4) +
@@ -56,7 +56,6 @@ geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = 
      geom_point(aes(x = lon, y = lat), data = risd, size = 3.5 , shape =22, fill =  "lightblue", alpha = 0.75 ) + 
      geom_point(aes(x = lon, y = lat), data = smith, size = 3.5 , shape =21, fill =  "lightgreen", alpha = 0.75 ) 
  
-  
 ```
 
 
@@ -83,7 +82,7 @@ map
 data("quakes")
 names(quakes)
 
-quake<-qmap("Lamiti, Fiji",zoom = 5, maptype = "terrain") +
+quake<-qmap("Lamiti, Fiji",zoom = 4, maptype = 'terrain') +
   geom_point (aes(x = long, y = lat, size = mag, color = depth), data = quakes) +
    scale_color_distiller(palette="BuPu", direction = 1)
 quake
@@ -92,4 +91,5 @@ quake
 
 
 ```{r}
+
 ```

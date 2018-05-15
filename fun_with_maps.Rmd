@@ -79,3 +79,15 @@ map <-leaflet() %>%
 map
 ```
 
+```{r}
+data("quakes")
+names(quakes)
+
+quake<-qmap("Lamiti, Fiji",zoom = 5, maptype = "terrain") +
+  geom_point (aes(x = long, y = lat, color = mag), data = quakes) +
+   scale_color_distiller(palette="BuPu", direction = 1)
+quake
+```
+
+
+

@@ -80,10 +80,13 @@ map
 
 ```{r}
 data("quakes")
-names(quakes)
+quakes<-quakes %>%
+    na.omit() %>%
+  filter(mag >= 4.5)
 
 quake<-qmap("Lamiti, Fiji",zoom = 4, maptype = 'terrain') +
   geom_point (aes(x = long, y = lat, size = mag, color = depth), data = quakes) +
+  geom_jitter() +
    scale_color_distiller(palette="BuPu", direction = 1)
 quake
 ```

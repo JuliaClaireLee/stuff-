@@ -132,3 +132,15 @@ Airport_map <-leaflet() %>%
       addScaleBar(options = scaleBarOptions(maxWidth = 80, metric = FALSE, imperial = TRUE, updateWhenIdle = TRUE)) 
 Airport_map
 ```
+
+
+```{r, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
+db1<-dbConnect_scidb(dbname = "citibike")
+dbListTables(db1)
+station<-db1 %>%
+dbGetQuery("SELECT *
+	FROM station_summary")
+```
+
+
+

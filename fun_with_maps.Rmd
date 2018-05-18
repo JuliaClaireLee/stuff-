@@ -138,8 +138,9 @@ Airport_map
 db1<-dbConnect_scidb(dbname = "citibike")
 dbListTables(db1)
 station<-db1 %>%
-dbGetQuery("SELECT *
+dbGetQuery("SELECT 
 	FROM station_summary")
+
 ```
 
 

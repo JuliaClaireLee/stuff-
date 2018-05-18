@@ -55,7 +55,7 @@ rutgers <-geocode(Rutgers)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
- qmap("Meriden, CT", zoom = 8, maptype = 'roadmap') +
+ map<-qmap("Meriden, CT", zoom = 8, maptype = 'roadmap') +
 geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "green", alpha = 0.65, size = 2, data = Yellow_Brick_road ) +
    geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "blue" , alpha = 0.65, size = 2, data = Yellow_Brick_road2) +
    geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = "purple" , alpha = 0.65, size = 2, data = Yellow_Brick_road4) +
@@ -63,7 +63,7 @@ geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = 
      geom_point(aes(x = lon, y = lat), data = rutgers, size = 3.5 , shape =25, fill =  "purple", alpha = 0.75 ) + 
      geom_point(aes(x = lon, y = lat), data = risd, size = 3.5 , shape =22, fill =  "lightblue", alpha = 0.75 ) + 
      geom_point(aes(x = lon, y = lat), data = smith, size = 3.5 , shape =21, fill =  "lightgreen", alpha = 0.75 ) 
- 
+ map
 ```
 
 
@@ -71,7 +71,7 @@ geom_leg(aes(x = startLon, y = startLat, xend = endLon, yend = endLat), color = 
 
 ```{r, message=FALSE, warning=FALSE}
 library(leaflet)
-map <-leaflet() %>%
+map2 <-leaflet() %>%
       addTiles(group = "Road") %>%
       addMarkers(lng = ~lon, lat = ~lat, data = home, popup = "Home") %>%
         addMarkers(lng = ~lon, lat = ~lat, data = smith, popup = "Smith") %>%
@@ -83,12 +83,12 @@ map <-leaflet() %>%
   addLayersControl(baseGroups = c("Topography_lines", "street","Satellite" )) 
   
 
-map
+map2
 ```
 
 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 data("quakes")
 quakes<-quakes %>%
     na.omit() %>%
@@ -107,14 +107,13 @@ db<-dbConnect_scidb(dbname = "airlines")
 dbListTables(db)
 ```
 
-```{r, message=FALSE, warning=FALSE,results='hide'}
+```{r, message=FALSE,warning=FALSE}
 airports<-db %>%
 dbGetQuery("SELECT name, lat, lon, city
 	FROM airports
 	Where name Like '%Intl'
 	OR name LIKE '%International'
 	OR name LIKE '%International%'")
-View(airports)
 ```
 
 ```{r, message=FALSE, warning=FALSE}

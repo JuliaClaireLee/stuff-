@@ -138,9 +138,28 @@ Airport_map
 db1<-dbConnect_scidb(dbname = "citibike")
 dbListTables(db1)
 station<-db1 %>%
-dbGetQuery("SELECT 
+dbGetQuery("SELECT *
 	FROM station_summary")
+View(station)
+```
 
+```{r}
+citibike<-leaflet() %>%
+      addTiles(group = "Road") %>%
+      addProviderTiles("Esri.WorldTopoMap", group = "Topography_lines")  %>%
+  addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
+  addLayersControl(baseGroups = c("Topography_lines", "street","Satellite" )) %>% 
+      addMarkers(lng = ~lon, lat = ~lat, data = station, popup = ~name) %>% 
+      addScaleBar(options = scaleBarOptions(maxWidth = 80, metric = FALSE, imperial = TRUE, updateWhenIdle = TRUE)) 
+citibike
+```
+
+
+```{r, message=FALSE, warning=FALSE,}
+qmap("Roosevelt Island, NY",zoom = 12, maptype = 'roadmap') +
+  geom_point (aes(x = lon, y = lat, color = num_stops), data = station) +
+  geom_jitter() +
+   scale_color_distiller(palette="Reds", direction = 1) 
 ```
 
 

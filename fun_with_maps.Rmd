@@ -43,10 +43,10 @@ H
 Rutgers <-"Rutgers–New Brunswick, New Brunswick, NJ"
 RISD <-"Rhode Island School of Design (RISD), College Street, Providence, RI"
 mapdist(from=Home, to = Smith, mode = "driving")
-Yellow_Brick_road<-route(Home, Smith, structure = "route", mode = "driving" ) 
-Yellow_Brick_road2<-route(Home, RISD, structure = "route", mode = "driving") 
-  Yellow_Brick_road3<-route(Smith, RISD, structure = "route", mode = "driving")
-  Yellow_Brick_road4<-route(Home, Rutgers, structure = "route", mode = "driving")
+Yellow_Brick_road<-route(Home, Smith, structure = "legs", mode = "driving" ) 
+Yellow_Brick_road2<-route(Home, RISD, structure = "legs", mode = "driving") 
+  Yellow_Brick_road3<-route(Smith, RISD, structure = "legs", mode = "driving")
+  Yellow_Brick_road4<-route(Home, Rutgers, structure = "legs", mode = "driving")
   home<-geocode(Home) 
 smith <-geocode(Smith)   
 risd <-geocode(RISD)

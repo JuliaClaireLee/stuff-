@@ -156,10 +156,11 @@ citibike
 
 
 ```{r, message=FALSE, warning=FALSE,}
-qmap("Roosevelt Island, NY",zoom = 12, maptype = 'roadmap') +
+citibike_station<-qmap("Roosevelt Island, NY",zoom = 12, maptype = 'roadmap') +
   geom_point (aes(x = lon, y = lat, color = num_stops), data = station) +
   geom_jitter() +
    scale_color_distiller(palette="Reds", direction = 1) 
+citibike_station
 ```
 
 

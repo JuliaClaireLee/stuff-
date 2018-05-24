@@ -1,0 +1,39 @@
+---
+title: "Untitled"
+author: "Julia Lee"
+date: "5/24/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(sf)
+#install.packages("statesRcontiguous")
+library(leaflet)
+library(statesRcontiguous)
+library(RSQLite)
+library(lwgeom)
+library(RgoogleMaps)
+library(ggmap)
+library(mdsr)
+library(RMySQL)
+library(dplyr)
+library(ggplot2)
+library(mosaic)
+library(extrafont)
+library(RSQLite)
+```
+
+
+
+```{r}
+district<-shp_all_us_congressional_districts %>% 
+mutate(area_of_district = st_area(geometry))
+color1<-colorFactor("Dark2", district$state.region)
+leaflet()%>%
+  addTiles() %>%
+  addPolygons(data = district, weight = 1, color = ~color1(state.region)) %>%
+   addScaleBar(options = scaleBarOptions(maxWidth = 80, metric = FALSE, imperial = TRUE, updateWhenIdle = TRUE)) 
+```
+

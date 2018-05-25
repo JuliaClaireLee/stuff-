@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(sf)
-install.packages("tm")
 library(leaflet)
 library(statesRcontiguous)
 library(RSQLite)
@@ -35,5 +34,9 @@ leaflet()%>%
   addTiles() %>%
   addPolygons(data = district, weight = 1, color = ~color1(state.region)) %>%
    addScaleBar(options = scaleBarOptions(maxWidth = 80, metric = FALSE, imperial = TRUE, updateWhenIdle = TRUE)) 
+```
+
+```{r}
+View(district)
 ```
 

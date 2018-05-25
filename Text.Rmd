@@ -1,0 +1,14 @@
+---
+title: "Untitled"
+author: "Julia Lee"
+date: "5/25/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("tm")
+library(tm)
+```
+
+

@@ -27,6 +27,8 @@ library(extrafont)
 library(RSQLite)
 ```
 
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Gerry-Mander_Edit.png/800px-The_Gerry-Mander_Edit.png)
+
 
 
 ```{r, warning=FALSE , message=FALSE, fig.align="center"}
@@ -43,7 +45,7 @@ leaflet()%>%
   addProviderTiles("Esri.NatGeoWorldMap", group = "world") %>%
   addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
    addProviderTiles("Stamen.Watercolor", group = "Watercolor") %>%
-  addLayersControl(baseGroups = c("Road","Satellite", "Watercolor", "world")) %>% 
+addLayersControl(baseGroups = c("Road","Satellite", "Watercolor", "world")) %>% 
   addPolygons(data = district, weight = 2, popup = paste(district$district.name, district$state.name)) %>%
    addScaleBar(options = scaleBarOptions(maxWidth = 80, metric = FALSE, imperial = TRUE, updateWhenIdle = TRUE)) 
 
@@ -53,7 +55,7 @@ leaflet()%>%
 
 <center>
 
-![](https://media.giphy.com/media/3otPoz8b9h7BIObqr6/giphy.gif)
+![](https://media.giphy.com/media/f07CA3SWJGguY/giphy.gif)
 
 </center>
 

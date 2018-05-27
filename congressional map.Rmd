@@ -1,8 +1,11 @@
 ---
-title: "Untitled"
+title: "Congressional Districts"
 author: "Julia Lee"
 date: "5/24/2018"
-output: html_document
+output: 
+  html_document:
+    theme: cosmo 
+    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
@@ -26,17 +29,33 @@ library(RSQLite)
 
 
 
-```{r}
+```{r, warning=FALSE , message=FALSE, fig.align="center"}
 district<-shp_all_us_congressional_districts %>% 
-mutate(area_of_district = st_area(geometry))
-color1<-colorFactor("Dark2", district$state.region)
+mutate(area_of_district = st_area(geometry)) %>% 
+  filter(district.name != "Congressional Districts not defined") %>%
+  filter(district.name != "Resident Commissioner District (at Large)") %>%
+  filter(district.name != "Delegate District (at Large)")
+color1<-colorFactor("Dark2", district$district.name)
+address_filter <-function(address){geocode(address
+)}
 leaflet()%>%
-  addTiles() %>%
-  addPolygons(data = district, weight = 1, color = ~color1(state.region)) %>%
+  addTiles(group = "Road") %>%
+  addProviderTiles("Esri.NatGeoWorldMap", group = "world") %>%
+  addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%
+   addProviderTiles("Stamen.Watercolor", group = "Watercolor") %>%
+  addLayersControl(baseGroups = c("Road","Satellite", "Watercolor", "world")) %>% 
+  addPolygons(data = district, weight = 2, popup = paste(district$district.name, district$state.name)) %>%
    addScaleBar(options = scaleBarOptions(maxWidth = 80, metric = FALSE, imperial = TRUE, updateWhenIdle = TRUE)) 
+
 ```
 
-```{r}
-View(district)
-```
+<br>
+
+<center>
+
+![](https://media.giphy.com/media/3otPoz8b9h7BIObqr6/giphy.gif)
+
+</center>
+
+<br>
 

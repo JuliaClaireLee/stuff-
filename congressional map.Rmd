@@ -41,6 +41,7 @@ color1<-colorFactor("Dark2", district$district.name)
 address_filter <-function(address){geocode(address
 )}
 leaflet()%>%
+  setView(lng = -97.333, lat = 37.68717609999999, zoom = 3.50) %>%
   addTiles(group = "Road") %>%
   addProviderTiles("Esri.NatGeoWorldMap", group = "world") %>%
   addProviderTiles("Esri.WorldImagery", group = "Satellite") %>%

@@ -7,8 +7,23 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-#install.packages("tm")
+library(tidyverse)
+library(mdsr)
+install.packages("textreg")
+library(textreg)
 library(tm)
 ```
 
-
+```{r}
+usconstitution_url <-"https://www.usconstitution.net/const.txt"
+usconstitution_Raw<-RCurl::getURL(usconstitution_url)
+usconstitution<-strsplit(usconstitution_Raw, "\r\n")[[1]]
+length(usconstitution)
+usconstitution <- usconstitution %>%
+  tm_map(removeNumbers)%>%
+  tm_map(stripWhitespace)%>%
+  tm_map(removePunctuation)%>%
+  tm_map(content_transformer(tolower))%>%
+  tm_map(removeWords, stopwords("english"))
+wordcloud(usconstitution, max.words = 30, scale= c(8,1), colors = topo.colors(n=30), random.color = TRUE)
+```

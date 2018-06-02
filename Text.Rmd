@@ -7,23 +7,48 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
 library(tidyverse)
 library(mdsr)
-install.packages("textreg")
-library(textreg)
-library(tm)
 ```
 
 ```{r}
-usconstitution_url <-"https://www.usconstitution.net/const.txt"
-usconstitution_Raw<-RCurl::getURL(usconstitution_url)
-usconstitution<-strsplit(usconstitution_Raw, "\r\n")[[1]]
-length(usconstitution)
-usconstitution <- usconstitution %>%
-  tm_map(removeNumbers)%>%
-  tm_map(stripWhitespace)%>%
-  tm_map(removePunctuation)%>%
-  tm_map(content_transformer(tolower))%>%
-  tm_map(removeWords, stopwords("english"))
-wordcloud(usconstitution, max.words = 30, scale= c(8,1), colors = topo.colors(n=30), random.color = TRUE)
+Hamlet_url <-"http://www.gutenberg.org/cache/epub/2265/pg2265.txt"
+Hamlet_Raw<-RCurl::getURL(Hamlet_url)
+Hamlet<-strsplit(Hamlet_Raw, "\r\n")[[1]]
+length(Hamlet)
+View(Hamlet)
+HAMLET <-grepl(" Hamlet\\ ." , Hamlet)
+OPHELIA <-grepl(" Ophelia\\ ." , Hamlet)
+POLONIUS <-grepl(" Polonius\\ ." , Hamlet)
+HORATIO <-grepl(" Horatio\\ ." , Hamlet)
+LAERTES <-grepl(" Laretes\\ ." , Hamlet)
+Claudius <-grepl(" Claudius\\ .", Hamlet)
+
+``` 
+
+```{r}
+freq <-data.frame(HAMLET, POLONIUS, HORATIO, LAERTES, Claudius, OPHELIA ) %>%
+  mutate(line = 1:length(Hamlet)) %>%
+  gather(key = "character", value = "speak", -line) %>%
+  mutate(speak = as.numeric(speak)) %>%
+filter(line > 255 & line < 5298)
+glimpse(freq)
 ```
+
+```{r}
+idx <-grep("^ACT[I|V]+", Hamlet)
+label <- str_extract(Hamlet[idx], "^ACT[I|V]+")
+act <-data.frame(line = idx, labels = label)
+
+```
+
+```{r}
+ggplot(data = freq, aes(x = line, y = speak)) + 
+  geom_smooth(aes(color = character), method = "loess", se = 0, span = 0.75) +
+  geom_vline(xintercept = idx, color = "darkgray", lty = 3) +
+ xlab("Line Number") + 
+  ylab("Porportion of Speeches")
+```
+
+

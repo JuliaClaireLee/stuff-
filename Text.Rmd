@@ -37,8 +37,8 @@ glimpse(freq)
 ```
 
 ```{r}
-idx <-grep("^ACT[I|V]+", Hamlet)
-label <- str_extract(Hamlet[idx], "^ACT[I|V]+")
+idx <-grep("ACT[I|V]+", Hamlet)
+label <- str_extract(Hamlet[idx], "ACT[I|V]+")
 act <-data.frame(line = idx, labels = label)
 
 ```
@@ -48,7 +48,7 @@ ggplot(data = freq, aes(x = line, y = speak)) +
   geom_smooth(aes(color = character), method = "loess", se = 0, span = 0.75) +
   geom_vline(xintercept = idx, color = "darkgray", lty = 3) +
  xlab("Line Number") + 
-  ylab("Porportion of Speeches")
+  ylab("Proportion of Speeches")
 ```
 
 

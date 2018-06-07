@@ -1,15 +1,26 @@
 ---
-title: "Untitled"
+title: "plots and text"
 author: "Julia Lee"
 date: "5/25/2018"
-output: html_document
+output:
+   html_document:
+    theme: united
+    code_folding: hide
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(tidyverse)
 library(mdsr)
+require(devtools)
+library(ggthemes)
+library(ggplot2)
+library(ggthemes)
+library(RColorBrewer)
+library(gridExtra)
+library(rmarkdown)
+library(wordcloud)
+library(tm)
 ```
 
 ```{r}
@@ -37,8 +48,8 @@ glimpse(freq)
 ```
 
 ```{r}
-idx <-grep("ACT[I|V]+", Hamlet)
-label <- str_extract(Hamlet[idx], "ACT[I|V]+")
+idx <-grep("^ACT[I|V]+", Hamlet)
+label <- str_extract(Hamlet[idx], "^ACT[I|V]+")
 act <-data.frame(line = idx, labels = label)
 
 ```
@@ -48,7 +59,111 @@ ggplot(data = freq, aes(x = line, y = speak)) +
   geom_smooth(aes(color = character), method = "loess", se = 0, span = 0.75) +
   geom_vline(xintercept = idx, color = "darkgray", lty = 3) +
  xlab("Line Number") + 
-  ylab("Proportion of Speeches")
+  ylab("Proportion of Speeches") +
+  ggtitle("Hamlet") +
+  theme_fivethirtyeight()
+
+```
+```{r}
+pal <- brewer.pal(15, "Blues")
+DeclarationofIndependence_url <-"http://www.constitution.org/usdeclar.txt"
+DeclarationofIndependence_Raw<-RCurl::getURL(DeclarationofIndependence_url)
+DeclarationofIndependence<-VCorpus(VectorSource(DeclarationofIndependence_Raw)) 
+DeclarationofIndependence<-DeclarationofIndependence %>%
+  tm_map(removeWords, stopwords("english")) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+wordcloud(DeclarationofIndependence, max.words = Inf, random.order=FALSE, min.freq = 2, scale = c(4,0.00115), colors = pal)
 ```
 
+
+
+```{r}
+pal2 <- brewer.pal(8,"Dark2")
+odyssey_url<-"https://www.clear.rice.edu/comp200/resources/texts/odyssey.txt"
+odyssey_Raw<-RCurl::getURL(odyssey_url)
+odyssey<-VCorpus(VectorSource(odyssey_Raw)) 
+odyssey<-odyssey %>%
+  tm_map(removeWords, stopwords("english")) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+wordcloud(odyssey, max.words = Inf, scale = c(4,0.00975125),random.order=FALSE,rot.per=.15, colors =pal2 )
+```
+```{r}
+pal3 <- brewer.pal(8,"Pastel1")
+Kennedy_url<-"https://www.clear.rice.edu/comp200/resources/texts/Kennedy%20Inaugural%20Address.txt"
+Kennedy_Raw<-RCurl::getURL(Kennedy_url)
+Kennedy<-VCorpus(VectorSource(Kennedy_Raw)) 
+Kennedy<-Kennedy%>%
+  tm_map(removeWords, stopwords("english")) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+wordcloud(Kennedy, max.words = Inf, scale = c(7, 0.125), random.order=FALSE, rot.per=.15, colors =pal3)
+```
+
+```{r}
+usconstitution_url<-"https://www.usconstitution.net/const.txt"
+usconstitution_Raw<-RCurl::getURL(usconstitution_url)
+usconstitution<-VCorpus(VectorSource(usconstitution_Raw)) 
+
+usconstitution<-usconstitution %>%
+  tm_map(removeWords, stopwords("english")) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace) %>%
+  tm_map(removeNumbers)
+wordcloud(usconstitution, max.words = Inf, scale = c(6,0.41),random.order=FALSE, rot.per=.15, colors =pal2 )
+```
+
+
+```{r}
+dataset <- read_csv("table-1 (1).csv", col_types = cols(`Aggravated \r` = col_number(), 
+    `Burglary \r` = col_number(), Larceny = col_number(), 
+    `Murder \r` = col_number(), `Rape\r` = col_number(), 
+    `Robbery \r` = col_number(), `Violent \r` = col_double(), 
+    Year = col_number())) %>%
+   na.omit() 
+```
+
+```{r}
+ggplot(data = dataset, aes(x= Year)) +
+  coord_cartesian(xlim=c(1997, 2016)) + 
+  geom_line(aes(y =`Rape\r`),size = 1, color = "red") +
+ ggtitle("Rape in the U.S.") +
+theme(panel.background = element_rect(fill ="gray"),legend.position="none",  text=element_text(size=15), plot.title = element_text(color="black", face="bold", size=25, hjust=0), axis.ticks.length = unit(4, "mm"), axis.ticks.y = element_blank()) +
+  ylab("Rape Rate (per 100,000 Inhabitants)") 
+
+```
+
+```{r}
+ggplot(data = dataset, aes(x= Year)) +
+  coord_cartesian(xlim=c(1997, 2016)) + 
+  geom_line(aes(y =`Murder \r`),size = 1, color = "blue") +
+ ggtitle("Murder in the U.S.")  +
+  ylab("Murder Rate (per 100,000 Inhabitants)") +
+  theme_fivethirtyeight()
+
+```
+
+
+
+```{r}
+ggplot(data = dataset, aes(x= Year)) +
+  coord_cartesian(xlim=c(1997, 2016)) + 
+  geom_line(aes(y =`Violent \r`),size = 1, color = "white") +
+ ggtitle("Violent Crime in the U.S.")  +
+  ylab("Violent Crime Rate (per 100,000 Inhabitants)") +
+  theme_solarized_2(light = FALSE)
+```
+
+```{r}
+ggplot(data = dataset, aes(x= Year)) +
+  coord_cartesian(xlim=c(1997, 2016)) + 
+  geom_line(aes(y =`Larceny`),size = 1, color = "green") +
+ ggtitle("Larceny-Theft in the U.S.")  +
+  ylab("Larceny-Theft Rate (per 100,000 Inhabitants)") +
+  theme_fivethirtyeight()
+```
+
+```{r}
+```
 
